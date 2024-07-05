@@ -1,4 +1,5 @@
-﻿using BusinessObjects.Entities;
+﻿using BusinessObjects.Dto;
+using BusinessObjects.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Services.Implementation;
@@ -18,35 +19,39 @@ namespace StoreManagement.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
+        public async Task<IActionResult> GetCategories()
         {
-            if (categoryService.GetCategories() != null) return categoryService.GetCategories().ToList();
-            return NotFound();
+           var result = await categoryService.GetCategories();
+           if (result == null) return NotFound();
+           return Ok(result);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Category>> GetCategory(int id)
+        public async Task<IActionResult> GetCategory(int id)
         {
-            if (categoryService.GetCategories() == null) NotFound();
-            var category = categoryService.GetCategoryById(id);
-            if (category == null) return NotFound(); 
-            return category;
+            var result = categoryService.GetCategoryById(id);
+            if (result == null) return NotFound(); 
+            return Ok(result);
         }
 
         [HttpPut("UpdateCategory")]
-        public async Task<ActionResult<Category>> UpdateCategory(int id, Category category)
+        public async Task<IActionResult> UpdateCategory(int id, CategoriesDto categoryDto)
         {
-            if (id != category.CategoryId) return BadRequest();
-            categoryService.UpdateCategory(id, category);
-            return NoContent();
+            if (id == null) return BadRequest();
+            Category ca = new Category
+            {
+                CategoryName = categoryDto.CategoryName
+            };
+            categoryService.UpdateCategory(id, ca);
+            return  NoContent();
         }
 
         [HttpPost("AddNewCategory")]
-        public async Task<ActionResult<Category>> AddCategory(Category category)
+        public async Task<ActionResult<Category>> AddCategory(CategoriesDto category)
         {
             if (categoryService.GetCategories() == null) return Problem("Entity set 'OrchidContext.orchid' is null");
-            categoryService.AddCategory(category);
-            return CreatedAtAction("GetCategory", new { id = category.CategoryId }, category);
+           var result = categoryService.AddCategory(category);
+           return Ok(result);
         }
 
         [HttpDelete("DeleteCategory")]

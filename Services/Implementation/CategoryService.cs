@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
+using BusinessObjects.Dto;
 using BusinessObjects.Entities;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Repositories.Implementation;
 using Repositories.Interface;
 using Services.Interface;
@@ -13,15 +16,17 @@ namespace Services.Implementation
     public class CategoryService : ICategoryService
     {
         private readonly ICategoryRepository _repository = null;
-        public CategoryService()
+        private readonly IMapper _mapper = null;
+        public CategoryService(IMapper mapper)
         {
             if (_repository == null)
             {
                 _repository = new CategoryRepository();
             }
+            _mapper = mapper;
         }
 
-        public List<Category> GetCategories()
+        public IEnumerable<Category> GetCategories()
         {
             return _repository.GetCategories();
         }
@@ -31,8 +36,9 @@ namespace Services.Implementation
             return _repository.GetCategoryById(id);
         }
 
-        public Category AddCategory(Category category)
+        public Category AddCategory(CategoriesDto categoryDto)
         {
+            Category category = _mapper.Map<Category>(categoryDto);
             return _repository.AddCategory(category);
         }
 
