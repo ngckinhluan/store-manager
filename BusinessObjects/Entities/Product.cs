@@ -1,23 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace BusinessObjects.Entities;
-
-public partial class Product
+namespace BusinessObjects.Entities
 {
-    public int ProductId { get; set; }
+    public class Product
+    {
+        public required int ProductId { get; set; }
+        [MaxLength(255)]
+        public string? ProductName { get; set; }
+        public required int CategoryId { get; set; }
+        public float Weight { get; set; }
+        public float UnitPrice { get; set; }
+        public int UnitsInStock { get; set; }
+        public Category? Category { get; set; }
+        public IEnumerable<OrderDetail>? OrderDetails { get; set; }
 
-    public int? CategoryId { get; set; }
-
-    public string? ProductName { get; set; }
-
-    public double? Weight { get; set; }
-
-    public decimal? UnitPrice { get; set; }
-
-    public int? UnitsInStock { get; set; }
-
-    public virtual Category? Category { get; set; }
-
-    public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
+    }
 }

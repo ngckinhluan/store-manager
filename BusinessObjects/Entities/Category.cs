@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace BusinessObjects.Entities;
-
-public partial class Category
+namespace BusinessObjects.Entities
 {
-    public int CategoryId { get; set; }
-
-    public string? CategoryName { get; set; }
-
-    public virtual ICollection<Product> Products { get; set; } = new List<Product>();
+    public class Category
+    {
+        public required int CategoryId { get; set; }
+        [MaxLength(50)]
+        public string? CategoryName { get; set; }
+        public IEnumerable<Product>? Products { get; set; }
+    }
 }

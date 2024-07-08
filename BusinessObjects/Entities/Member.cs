@@ -1,15 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace BusinessObjects.Entities;
-
-public partial class Member
+namespace BusinessObjects.Entities
 {
-    public int MemberId { get; set; }
-
-    public string? Email { get; set; }
-
-    public string? CompanyName { get; set; }
-
-    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
+    public class Member
+    {
+        public required int MemberId { get; set; }
+        [MaxLength(255)]
+        public required string Email { get; set; }
+        [MaxLength(255)]
+        public required string Password { get; set; }
+        [MaxLength(255)]
+        public required string FirstName { get; set; }
+        [MaxLength(255)]
+        public required string LastName { get; set; }
+        [MaxLength(255)]
+        public required string UserName { get; set; }
+        [MaxLength(50)]
+        public string? Country { get; set; }
+        [MaxLength(50)]
+        public string? City { get; set; }
+        public IEnumerable<Order>? Orders  { get; set; }
+    }
 }
